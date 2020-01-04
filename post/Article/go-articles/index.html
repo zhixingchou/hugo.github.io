@@ -1,0 +1,41 @@
+<u>Golang 之于 DevOps 开发的利与弊（六部曲之一）：Goroutines, Channels, Panics, 和 Errors</u>
+
+https://studygolang.com/articles/11983
+
+<u>Go Lang＆DevOps-天造地设？</u>
+
+https://medium.com/@pavanbelagatti/go-lang-devops-a-match-made-in-heaven-a24d5de45e26
+
+
+
+[使用Go作为NodeSource的基础结构语言](使用Go作为NodeSource的基础结构语言)
+
+```
+A few additional modules which I consider to be very important for writing Go programs include:
+
+cobra and viper make it very easy to create software that supports loading configuration files and having command-line switches. Any moderately-important software should have at minimum CLI switches, and any really important software should probably load its configuration from a JSON or YAML file. Both of these modules allow you to do that.
+logrus is another important module for logging. It's not required, but makes software feel more polished and ready for production. This is definitely preferable to just using fmt.Printf statements.
+jsonq this library makes it easier to read JSON data, even though it is already easy to marshal/unmarshal JSON-encoded data in Go.
+Finally, because our team uses Go as our preferred cloud infrastructure language, I would also suggest the following critical modules that are used to interact with our cloud environments:
+
+aws-sdk-go is the official AWS SDK for Go. I have used it extensively for interacting with AWS services including (but not limited to) S3, ECS, and EC2.
+The Slack API in Go allows me to post messages to slack from anything written in Go—as part of a Slack-friendly team, this has been critical for me.
+The Docker SDK for Go is the module to write Go code that can interact with a Docker host; critical if you’re planning to write any of your own tooling to pull data from your containerized environment.
+The official Go client library for Prometheus allows me to define and expose Prometheus metrics from any Go binary I’ve written.
+以上两个好处或多或少是语言本身的“核心”。但是，任何语言都需要第三方模块。
+
+我认为对于编写Go程序非常重要的一些其他模块包括：
+
+cobra和viper使创建支持加载配置文件和具有命令行开关的软件非常容易。任何重要程度不高的软件都应至少具有CLI开关，并且任何真正重要的软件都应从JSON或YAML文件中加载其配置。这两个模块都允许您执行此操作。
+logrus是另一个重要的日志记录模块。它不是必需的，但可以使软件更加美观，可以投入生产。这绝对比仅使用fmt.Printf语句更可取。
+jsonq这个库可以使读取JSON数据更加容易，即使在Go中将JSON编码的数据封送 /解组已经很容易。
+最后，由于我们的团队将Go用作我们首选的云基础架构语言，因此我也建议使用以下与我们的云环境进行交互的关键模块：
+
+aws-sdk-go是Go的官方AWS开发工具包。我已广泛使用它与AWS服务进行交互，包括（但不限于）S3，ECS和EC2。
+Go中的Slack API允许我将消息发布到Go编写的所有内容中，作为一个对Slack友好的团队的一部分，这对我来说至关重要。
+该泊坞窗SDK的围棋是写Go代码可与码头工人主机交互的模块; 如果您打算编写自己的任何工具以从容器化环境中提取数据，则至关重要。
+Prometheus的官方Go客户端库允许我从我编写的任何Go二进制文件中定义和公开Prometheus指标。
+```
+
+
+

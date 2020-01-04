@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>“source code” on Zhixing DevOps Tips</title>
+    <link>https://zhixingchou.github.io/categories/source-code/</link>
+    <description>Recent content in “source code” on Zhixing DevOps Tips</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 07 Jul 2019 22:28:34 +0800</lastBuildDate>
+    
+	<atom:link href="https://zhixingchou.github.io/categories/source-code/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>源代码</title>
+      <link>https://zhixingchou.github.io/post/%E6%BA%90%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Sun, 07 Jul 2019 22:28:34 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/post/%E6%BA%90%E4%BB%A3%E7%A0%81/</guid>
+      <description>Tips 喜欢这种从出现到发展、由浅入深、由一小段代码讲述某种实现的讲述，既容易理解，也深入了解了原理。娓娓道来，很有条理，就像身临当时docker</description>
+    </item>
+    
+  </channel>
+</rss>

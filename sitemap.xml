@@ -1,0 +1,363 @@
+<?xml-stylesheet type="text/xsl" href="https://zhixingchou.github.io/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/even-preview/</loc>
+    <lastmod>2018-07-10T00:00:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/about/</loc>
+    <lastmod>2020-01-04T15:38:52+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/</loc>
+    <lastmod>2020-01-04T15:38:52+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/categories/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/categories/docker/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/docker/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/preview/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/tag-1/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/my-test-post-2/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/%E4%B8%AD%E6%96%87/</loc>
+    <lastmod>2019-09-30T01:37:56+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/code/</loc>
+    <lastmod>2019-07-07T22:28:34+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/categories/source-code/</loc>
+    <lastmod>2019-07-07T22:28:34+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/%E6%BA%90%E4%BB%A3%E7%A0%81/</loc>
+    <lastmod>2019-07-07T22:28:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Docker/</loc>
+    <lastmod>2019-01-04T01:37:56+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/categories/template/</loc>
+    <lastmod>2018-07-10T00:00:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/template/</loc>
+    <lastmod>2018-07-10T00:00:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/hidden-post/</loc>
+    <lastmod>2018-03-08T22:01:19+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/english-preview/</loc>
+    <lastmod>2017-08-31T15:43:48+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/japanese-preview/</loc>
+    <lastmod>2017-08-30T01:53:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/chinese-preview/</loc>
+    <lastmod>2017-08-30T01:37:56+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/shortcodes/</loc>
+    <lastmod>2018-02-01T18:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/categories/shortcodes/</loc>
+    <lastmod>2018-02-01T18:01:23+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/shortcodes/</loc>
+    <lastmod>2018-02-01T18:01:23+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/js-flowchart-diagrams/</loc>
+    <lastmod>2015-03-04T21:57:50+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/js-sequence-diagrams/</loc>
+    <lastmod>2015-03-04T21:57:45+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/categories/Syntax-Highlighting/</loc>
+    <lastmod>2018-11-05T16:01:23+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/Syntax-Highlighting/</loc>
+    <lastmod>2018-11-05T16:01:23+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/syntax-highlighting/</loc>
+    <lastmod>2018-11-05T16:01:23+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/tags/tag-5/</loc>
+    <lastmod>2018-11-05T16:01:23+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Architecture/k8s-architecture/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Article/devops-articles/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Article/go-articles/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Article/k8s-articles/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Book/book/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Hugo-Github-pages/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Interesting/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/K8S/Kubernetes/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/K8S/minikube/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/K8S/rancher/ubuntu_install_rancher/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Keys-begin-2019/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Keyword/keyword/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/MacOS/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Monitor-method/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Paper/prometheus-papers/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Papers/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Project/projects-golang/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Prometheus/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/README/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Read-Summary/Distributed-github_feixiao_Distributed-Systems/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Resources/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Source-Code/k8s/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Terraform/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Todo-begin-2019/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Tool-tmux/Tmux/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Tool-tmux/custom-tmux/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Tools/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Tools/oh-my-zsh/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Trace/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Ubnt-tmp-files/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/Vagrant/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://zhixingchou.github.io/post/healthycheck%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8%E5%AE%BF%E4%B8%BB%E6%9C%BA%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

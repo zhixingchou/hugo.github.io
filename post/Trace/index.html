@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - Zhixing DevOps Tips</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Zhixing Zhou" /><meta name="description" content="Trace Linux问题分析与性能优化 https://www.lijiaocn.com/linux/chapter1/
+ 记录Linux相关的知识，性能优化部分的内容主要来自极客时间出品的倪鹏飞专栏《Linux性能优化》
+ BCC （bpf compiler collection）  Tools for BPF-based Linux IO analysis, networking, monitoring, and more
+ https://github.com/iovisor/bcc
+https://iovisor.github.io/bcc/
+ execsnoop  https://blog.51cto.com/liuzhengwei521/2419139?source=dra
+https://blog.51cto.com/liuzhengwei521/2419139
+ 在实际工作中，偶尔会遇到系统的CPU使用率和系统平均负载很高，但却找不到高CPU的应用；产生这个问题的原因：进程有可能在不断的崩溃、重启
+ https://www.liritian.com/2019/04/02/linux-baidu/
+ 假设我们有这样一个场景，系统中偶尔会运行新的进程，这些新的进程可能会消耗大量系统资源，从而对我们生产上运行的环境产生干扰，但是这种进程可能运行时间极为短暂，我们怎样才能知道发生了这种情况呢？top？可能不行，时间太短了，可能top还没来得及统计，进程已经退出了。这种情况下最适合使用的工具之一就是BCC工具集中的execsnoop，图中可以看出，每一个新启动的进程都会被记录在案
+ https://www.cnblogs.com/pugang/p/10009896.html
+https://yq.aliyun.com/articles/590865
+ 抓取当前活跃的进程。特别是一闪而过的短命进程,以及进程的返回值和其参数。这个工具跟踪了execute系统调用，在创建新进程的时候是fork-&amp;gt;exec的，当exec时候就会被抓住，有些应用只有fork没有执行exec就不会被抓到。加上-x参数就可以抓到exec失败的进程。参数-t可以打印出时间戳，-n参数可以进行名字过滤。参数-l可以识别进程的指定参数。
+ 安装
+https://zhuanlan.zhihu.com/p/57579051
+BPFtrace  (https://github.com/iovisor/bpftrace) (https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md) (https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md) (https://github.com/iovisor/bcc)  book
+http://www.brendangregg.com/bpf-performance-tools-book.html
+bpftrace Reference Guide
+https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md
+About people
+ Alexei Starovoitov  @alexei_ast
+ Brendan Gregg   基于eBPF做性能工具研发的工作，比如bcc工具集，最近又参与了bpftrace的工具" /><meta name="keywords" content="DevOps, 运维, Mac, Github, Vue, React, Front End" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="https://zhixingchou.github.io/post/Trace/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="Trace Linux问题分析与性能优化 https://www.lijiaocn.com/linux/chapter1/
+ 记录Linux相关的知识，性能优化部分的内容主要来自极客时间出品的倪鹏飞专栏《Linux性能优化》
+ BCC （bpf compiler collection）  Tools for BPF-based Linux IO analysis, networking, monitoring, and more
+ https://github.com/iovisor/bcc
+https://iovisor.github.io/bcc/
+ execsnoop  https://blog.51cto.com/liuzhengwei521/2419139?source=dra
+https://blog.51cto.com/liuzhengwei521/2419139
+ 在实际工作中，偶尔会遇到系统的CPU使用率和系统平均负载很高，但却找不到高CPU的应用；产生这个问题的原因：进程有可能在不断的崩溃、重启
+ https://www.liritian.com/2019/04/02/linux-baidu/
+ 假设我们有这样一个场景，系统中偶尔会运行新的进程，这些新的进程可能会消耗大量系统资源，从而对我们生产上运行的环境产生干扰，但是这种进程可能运行时间极为短暂，我们怎样才能知道发生了这种情况呢？top？可能不行，时间太短了，可能top还没来得及统计，进程已经退出了。这种情况下最适合使用的工具之一就是BCC工具集中的execsnoop，图中可以看出，每一个新启动的进程都会被记录在案
+ https://www.cnblogs.com/pugang/p/10009896.html
+https://yq.aliyun.com/articles/590865
+ 抓取当前活跃的进程。特别是一闪而过的短命进程,以及进程的返回值和其参数。这个工具跟踪了execute系统调用，在创建新进程的时候是fork-&gt;exec的，当exec时候就会被抓住，有些应用只有fork没有执行exec就不会被抓到。加上-x参数就可以抓到exec失败的进程。参数-t可以打印出时间戳，-n参数可以进行名字过滤。参数-l可以识别进程的指定参数。
+ 安装
+https://zhuanlan.zhihu.com/p/57579051
+BPFtrace  (https://github.com/iovisor/bpftrace) (https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md) (https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md) (https://github.com/iovisor/bcc)  book
+http://www.brendangregg.com/bpf-performance-tools-book.html
+bpftrace Reference Guide
+https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md
+About people
+ Alexei Starovoitov  @alexei_ast
+ Brendan Gregg   基于eBPF做性能工具研发的工作，比如bcc工具集，最近又参与了bpftrace的工具" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zhixingchou.github.io/post/Trace/" />
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="Trace Linux问题分析与性能优化 https://www.lijiaocn.com/linux/chapter1/
+ 记录Linux相关的知识，性能优化部分的内容主要来自极客时间出品的倪鹏飞专栏《Linux性能优化》
+ BCC （bpf compiler collection）  Tools for BPF-based Linux IO analysis, networking, monitoring, and more
+ https://github.com/iovisor/bcc
+https://iovisor.github.io/bcc/
+ execsnoop  https://blog.51cto.com/liuzhengwei521/2419139?source=dra
+https://blog.51cto.com/liuzhengwei521/2419139
+ 在实际工作中，偶尔会遇到系统的CPU使用率和系统平均负载很高，但却找不到高CPU的应用；产生这个问题的原因：进程有可能在不断的崩溃、重启
+ https://www.liritian.com/2019/04/02/linux-baidu/
+ 假设我们有这样一个场景，系统中偶尔会运行新的进程，这些新的进程可能会消耗大量系统资源，从而对我们生产上运行的环境产生干扰，但是这种进程可能运行时间极为短暂，我们怎样才能知道发生了这种情况呢？top？可能不行，时间太短了，可能top还没来得及统计，进程已经退出了。这种情况下最适合使用的工具之一就是BCC工具集中的execsnoop，图中可以看出，每一个新启动的进程都会被记录在案
+ https://www.cnblogs.com/pugang/p/10009896.html
+https://yq.aliyun.com/articles/590865
+ 抓取当前活跃的进程。特别是一闪而过的短命进程,以及进程的返回值和其参数。这个工具跟踪了execute系统调用，在创建新进程的时候是fork-&gt;exec的，当exec时候就会被抓住，有些应用只有fork没有执行exec就不会被抓到。加上-x参数就可以抓到exec失败的进程。参数-t可以打印出时间戳，-n参数可以进行名字过滤。参数-l可以识别进程的指定参数。
+ 安装
+https://zhuanlan.zhihu.com/p/57579051
+BPFtrace  (https://github.com/iovisor/bpftrace) (https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md) (https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md) (https://github.com/iovisor/bcc)  book
+http://www.brendangregg.com/bpf-performance-tools-book.html
+bpftrace Reference Guide
+https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md
+About people
+ Alexei Starovoitov  @alexei_ast
+ Brendan Gregg   基于eBPF做性能工具研发的工作，比如bcc工具集，最近又参与了bpftrace的工具">
+
+
+
+<meta itemprop="wordCount" content="99">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="Trace Linux问题分析与性能优化 https://www.lijiaocn.com/linux/chapter1/
+ 记录Linux相关的知识，性能优化部分的内容主要来自极客时间出品的倪鹏飞专栏《Linux性能优化》
+ BCC （bpf compiler collection）  Tools for BPF-based Linux IO analysis, networking, monitoring, and more
+ https://github.com/iovisor/bcc
+https://iovisor.github.io/bcc/
+ execsnoop  https://blog.51cto.com/liuzhengwei521/2419139?source=dra
+https://blog.51cto.com/liuzhengwei521/2419139
+ 在实际工作中，偶尔会遇到系统的CPU使用率和系统平均负载很高，但却找不到高CPU的应用；产生这个问题的原因：进程有可能在不断的崩溃、重启
+ https://www.liritian.com/2019/04/02/linux-baidu/
+ 假设我们有这样一个场景，系统中偶尔会运行新的进程，这些新的进程可能会消耗大量系统资源，从而对我们生产上运行的环境产生干扰，但是这种进程可能运行时间极为短暂，我们怎样才能知道发生了这种情况呢？top？可能不行，时间太短了，可能top还没来得及统计，进程已经退出了。这种情况下最适合使用的工具之一就是BCC工具集中的execsnoop，图中可以看出，每一个新启动的进程都会被记录在案
+ https://www.cnblogs.com/pugang/p/10009896.html
+https://yq.aliyun.com/articles/590865
+ 抓取当前活跃的进程。特别是一闪而过的短命进程,以及进程的返回值和其参数。这个工具跟踪了execute系统调用，在创建新进程的时候是fork-&gt;exec的，当exec时候就会被抓住，有些应用只有fork没有执行exec就不会被抓到。加上-x参数就可以抓到exec失败的进程。参数-t可以打印出时间戳，-n参数可以进行名字过滤。参数-l可以识别进程的指定参数。
+ 安装
+https://zhuanlan.zhihu.com/p/57579051
+BPFtrace  (https://github.com/iovisor/bpftrace) (https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md) (https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md) (https://github.com/iovisor/bcc)  book
+http://www.brendangregg.com/bpf-performance-tools-book.html
+bpftrace Reference Guide
+https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md
+About people
+ Alexei Starovoitov  @alexei_ast
+ Brendan Gregg   基于eBPF做性能工具研发的工作，比如bcc工具集，最近又参与了bpftrace的工具"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Zhixing DevOps Tips</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a><a href="https://github.com/nusr/reading-list/">
+        <li class="mobile-menu-item">阅读清单</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Zhixing DevOps Tips</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://github.com/nusr/reading-list/">阅读清单</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 00:00 </span>
+        
+          <span class="more-meta"> 约 99 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#trace">Trace</a></li>
+<li><a href="#linux问题分析与性能优化">Linux问题分析与性能优化</a></li>
+<li><a href="#bcc-bpf-compiler-collection">BCC （bpf compiler collection）</a></li>
+<li><a href="#bpftrace">BPFtrace</a></li>
+<li><a href="#tips">Tips</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="0001-01-01T00:00:00" title="January 1, 0001">January 1, 0001</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      
+
+<h1 id="trace">Trace</h1>
+
+<h1 id="linux问题分析与性能优化">Linux问题分析与性能优化</h1>
+
+<p><a href="https://www.lijiaocn.com/linux/chapter1/">https://www.lijiaocn.com/linux/chapter1/</a></p>
+
+<blockquote>
+<p>记录Linux相关的知识，性能优化部分的内容主要来自极客时间出品的倪鹏飞专栏《Linux性能优化》</p>
+</blockquote>
+
+<h1 id="bcc-bpf-compiler-collection">BCC （bpf compiler collection）</h1>
+
+<blockquote>
+<p><strong>Tools for BPF-based Linux IO analysis, networking, monitoring, and more</strong></p>
+</blockquote>
+
+<p><a href="https://github.com/iovisor/bcc">https://github.com/iovisor/bcc</a></p>
+
+<p><a href="https://iovisor.github.io/bcc/">https://iovisor.github.io/bcc/</a></p>
+
+<ul>
+<li><strong>execsnoop</strong></li>
+</ul>
+
+<p><a href="https://blog.51cto.com/liuzhengwei521/2419139?source=dra">https://blog.51cto.com/liuzhengwei521/2419139?source=dra</a></p>
+
+<p><a href="https://blog.51cto.com/liuzhengwei521/2419139">https://blog.51cto.com/liuzhengwei521/2419139</a></p>
+
+<blockquote>
+<p>在实际工作中，偶尔会遇到系统的CPU使用率和系统平均负载很高，但却找不到高CPU的应用；产生这个问题的原因：进程有可能在不断的崩溃、重启</p>
+</blockquote>
+
+<p><a href="https://www.liritian.com/2019/04/02/linux-baidu/">https://www.liritian.com/2019/04/02/linux-baidu/</a></p>
+
+<blockquote>
+<p>假设我们有这样一个场景，系统中偶尔会运行新的进程，这些新的进程可能会消耗大量系统资源，从而对我们生产上运行的环境产生干扰，但是这种进程可能运行时间极为短暂，我们怎样才能知道发生了这种情况呢？top？可能不行，时间太短了，可能top还没来得及统计，进程已经退出了。这种情况下最适合使用的工具之一就是BCC工具集中的execsnoop，图中可以看出，每一个新启动的进程都会被记录在案</p>
+</blockquote>
+
+<p><a href="https://www.cnblogs.com/pugang/p/10009896.html">https://www.cnblogs.com/pugang/p/10009896.html</a></p>
+
+<p><a href="https://yq.aliyun.com/articles/590865">https://yq.aliyun.com/articles/590865</a></p>
+
+<blockquote>
+<p>抓取当前活跃的进程。特别是一闪而过的短命进程,以及进程的返回值和其参数。这个工具跟踪了execute系统调用，在创建新进程的时候是fork-&gt;exec的，当exec时候就会被抓住，有些应用只有fork没有执行exec就不会被抓到。加上-x参数就可以抓到exec失败的进程。参数-t可以打印出时间戳，-n参数可以进行名字过滤。参数-l可以识别进程的指定参数。</p>
+</blockquote>
+
+<p>安装</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/57579051">https://zhuanlan.zhihu.com/p/57579051</a></p>
+
+<hr />
+
+<h1 id="bpftrace">BPFtrace</h1>
+
+<ul>
+<li>(<a href="https://github.com/iovisor/bpftrace">https://github.com/iovisor/bpftrace</a>)</li>
+<li>(<a href="https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md">https://github.com/iovisor/bpftrace/blob/master/docs/tutorial_one_liners.md</a>)</li>
+<li>(<a href="https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md">https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md</a>)</li>
+<li>(<a href="https://github.com/iovisor/bcc">https://github.com/iovisor/bcc</a>)</li>
+</ul>
+
+<p><strong>book</strong></p>
+
+<p><a href="http://www.brendangregg.com/bpf-performance-tools-book.html">http://www.brendangregg.com/bpf-performance-tools-book.html</a></p>
+
+<p><strong>bpftrace Reference Guide</strong></p>
+
+<p><a href="https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md">https://github.com/iovisor/bpftrace/blob/master/docs/reference_guide.md</a></p>
+
+<hr />
+
+<p><strong>About people</strong></p>
+
+<ul>
+<li>Alexei Starovoitov</li>
+</ul>
+
+<p><a href="https://twitter.com/alexei_ast">@alexei_ast</a></p>
+
+<ul>
+<li>Brendan Gregg</li>
+</ul>
+
+<blockquote>
+<p>基于eBPF做性能工具研发的工作，比如bcc工具集，最近又参与了bpftrace的工具</p>
+
+<p><a href="https://cloud.tencent.com/developer/article/1442285">https://cloud.tencent.com/developer/article/1442285</a></p>
+</blockquote>
+
+<hr />
+
+<p><strong>国内牛人</strong></p>
+
+<p><a href="https://cloud.tencent.com/developer/article/1442285">强劲的Linux Trace工具：bpftrace (DTrace 2.0) for Linux 2018</a></p>
+
+<p><strong>Areas using eBPF</strong></p>
+
+<p><a href="https://prototype-kernel.readthedocs.io/en/latest/bpf/index.html">https://prototype-kernel.readthedocs.io/en/latest/bpf/index.html</a></p>
+
+<ul>
+<li><a href="https://prototype-kernel.readthedocs.io/en/latest/networking/XDP/index.html">XDP - eXpress Data Path</a></li>
+<li><a href="http://man7.org/linux/man-pages/man8/tc-bpf.8.html">Traffic control</a></li>
+<li>Sockets</li>
+<li>Firewalling (<code>xt_bpf</code> module)</li>
+<li>Tracing</li>
+<li>Tracepoints</li>
+<li>kprobe (dynamic tracing of a kernel function call)</li>
+<li>cgroups</li>
+</ul>
+
+<p><strong>A thorough introduction to eBPF — 全面介绍 eBPF</strong></p>
+
+<p><a href="https://lwn.net/Articles/740157/">https://lwn.net/Articles/740157/</a></p>
+
+<hr />
+
+<blockquote>
+<p>官方文档</p>
+
+<p><a href="https://www.kernel.org/doc/Documentation/networking/filter.txt">https://www.kernel.org/doc/Documentation/networking/filter.txt</a></p>
+</blockquote>
+
+<hr />
+
+<h1 id="tips">Tips</h1>
+
+<blockquote>
+<p>对kernel了解的越多，性能分析、优化就越顺畅</p>
+
+<p><a href="https://www.lijiaocn.com/linux/chapter1/kernel.html">https://www.lijiaocn.com/linux/chapter1/kernel.html</a></p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Zhixing Zhou</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        0001-01-01 00:00
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/Tools/oh-my-zsh/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/Ubnt-tmp-files/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/stevexu" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:zhixing0912@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/zhixingchou" class="iconfont icon-github" title="github"></a>
+      <a href="https://juejin.im/user/59aeb829f265da249960595a" class="iconfont icon-juejin" title="juejin"></a>
+      <a href="https://www.v2ex.com/member/stevexu" class="iconfont icon-v2ex" title="v2ex"></a>
+  <a href="https://zhixingchou.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Zhixing Zhou</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-CN".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

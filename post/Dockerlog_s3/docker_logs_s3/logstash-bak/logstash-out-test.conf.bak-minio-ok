@@ -1,0 +1,32 @@
+input {
+  beats {
+    port => 5044
+    codec => plain {
+      charset => "UTF-8"
+    }
+  }
+}
+output {
+  stdout {
+    codec => rubydebug
+  }
+}
+output {
+  s3 {
+    access_key_id => "minio"
+    secret_access_key => "minio123"
+#    region => "ap-southeast-1"
+    endpoint => "http://192.168.31.155:9080"
+#    force_path_style => true
+    additional_settings => {
+        force_path_style => true
+        follow_redirects => false
+    }
+    prefix => "containerslog/%{+YYYY-MM-dd}"
+    bucket => "testbucket"
+    size_file => 2048
+    time_file=> 1
+    codec => "json_lines"
+    canned_acl => "private"
+  }
+}

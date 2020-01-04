@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - Zhixing DevOps Tips</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Zhixing Zhou" /><meta name="description" content="Kubernetes 安装 参考链接
+https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/README-cn.md
+ Mac OS 测试可以安装，使用代理下载安装包快
+ roadmap article
+https://time.geekbang.org/column/intro/116
+安装 kubeadm
+ 到目前为止（2018 年 9 月），这个问题的答案是：不能。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+想咨询下kubeadm适合生产环境安装集群么
+作者回复: 小规模可以。
+张老师，后面能讲讲怎么用二进制部署kubernetes吗？毕竟kubeadm不适用于生产环境，用二进制部署还是挺复杂的，恳请老师不吝讲解一下吧。
+ 作者回复: 我不建议直接使用二进制文件部署。而建议你花时间了解一下kubeadm的高可用部署，它现在已经初具雏形了。宝贵的时间应该用在刀刃上。
+https://time.geekbang.org/column/article/39712
+  kops
+ 如果你有部署规模化生产环境的需求，我推荐使用kops或者SaltStack 这样更复杂的部署工具。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+ ansible
+ https://github.com/easzlab/kubeasz
+ install on macos
+ 请问一下在MacBook上安装部署k8s要怎么做？
+ 作者回复: minikube
+https://time.geekbang.org/column/article/39712
+  operator 深入剖析Kubernetes
+ 技能图谱
+ https://static001.geekbang.org/resource/image/0d/cb/0da944e5bac4fe1d00d3f01a747e86cb.jpg
+best article 学习 Kubernetes 和容器技术体系的最佳方法
+Tips  （swarm）
+试用Rancher搭建过一个环境，感觉过程和kubeadm有些类似，主节点初始化生成token，其它节点通过token来进行join，而且是图形化。对于部署、运维能力都有限的中小企业来说，是否可以考虑这些非原生的部署方案？甚至是否可以考虑docker swarm呢？麻烦给个建议。" /><meta name="keywords" content="DevOps, 运维, Mac, Github, Vue, React, Front End" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.55.6 with theme even" />
+
+
+<link rel="canonical" href="https://zhixingchou.github.io/post/K8S/Kubernetes/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="Kubernetes 安装 参考链接
+https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/README-cn.md
+ Mac OS 测试可以安装，使用代理下载安装包快
+ roadmap article
+https://time.geekbang.org/column/intro/116
+安装 kubeadm
+ 到目前为止（2018 年 9 月），这个问题的答案是：不能。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+想咨询下kubeadm适合生产环境安装集群么
+作者回复: 小规模可以。
+张老师，后面能讲讲怎么用二进制部署kubernetes吗？毕竟kubeadm不适用于生产环境，用二进制部署还是挺复杂的，恳请老师不吝讲解一下吧。
+ 作者回复: 我不建议直接使用二进制文件部署。而建议你花时间了解一下kubeadm的高可用部署，它现在已经初具雏形了。宝贵的时间应该用在刀刃上。
+https://time.geekbang.org/column/article/39712
+  kops
+ 如果你有部署规模化生产环境的需求，我推荐使用kops或者SaltStack 这样更复杂的部署工具。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+ ansible
+ https://github.com/easzlab/kubeasz
+ install on macos
+ 请问一下在MacBook上安装部署k8s要怎么做？
+ 作者回复: minikube
+https://time.geekbang.org/column/article/39712
+  operator 深入剖析Kubernetes
+ 技能图谱
+ https://static001.geekbang.org/resource/image/0d/cb/0da944e5bac4fe1d00d3f01a747e86cb.jpg
+best article 学习 Kubernetes 和容器技术体系的最佳方法
+Tips  （swarm）
+试用Rancher搭建过一个环境，感觉过程和kubeadm有些类似，主节点初始化生成token，其它节点通过token来进行join，而且是图形化。对于部署、运维能力都有限的中小企业来说，是否可以考虑这些非原生的部署方案？甚至是否可以考虑docker swarm呢？麻烦给个建议。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zhixingchou.github.io/post/K8S/Kubernetes/" />
+
+
+<meta itemprop="name" content="">
+<meta itemprop="description" content="Kubernetes 安装 参考链接
+https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/README-cn.md
+ Mac OS 测试可以安装，使用代理下载安装包快
+ roadmap article
+https://time.geekbang.org/column/intro/116
+安装 kubeadm
+ 到目前为止（2018 年 9 月），这个问题的答案是：不能。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+想咨询下kubeadm适合生产环境安装集群么
+作者回复: 小规模可以。
+张老师，后面能讲讲怎么用二进制部署kubernetes吗？毕竟kubeadm不适用于生产环境，用二进制部署还是挺复杂的，恳请老师不吝讲解一下吧。
+ 作者回复: 我不建议直接使用二进制文件部署。而建议你花时间了解一下kubeadm的高可用部署，它现在已经初具雏形了。宝贵的时间应该用在刀刃上。
+https://time.geekbang.org/column/article/39712
+  kops
+ 如果你有部署规模化生产环境的需求，我推荐使用kops或者SaltStack 这样更复杂的部署工具。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+ ansible
+ https://github.com/easzlab/kubeasz
+ install on macos
+ 请问一下在MacBook上安装部署k8s要怎么做？
+ 作者回复: minikube
+https://time.geekbang.org/column/article/39712
+  operator 深入剖析Kubernetes
+ 技能图谱
+ https://static001.geekbang.org/resource/image/0d/cb/0da944e5bac4fe1d00d3f01a747e86cb.jpg
+best article 学习 Kubernetes 和容器技术体系的最佳方法
+Tips  （swarm）
+试用Rancher搭建过一个环境，感觉过程和kubeadm有些类似，主节点初始化生成token，其它节点通过token来进行join，而且是图形化。对于部署、运维能力都有限的中小企业来说，是否可以考虑这些非原生的部署方案？甚至是否可以考虑docker swarm呢？麻烦给个建议。">
+
+
+
+<meta itemprop="wordCount" content="65">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="Kubernetes 安装 参考链接
+https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/README-cn.md
+ Mac OS 测试可以安装，使用代理下载安装包快
+ roadmap article
+https://time.geekbang.org/column/intro/116
+安装 kubeadm
+ 到目前为止（2018 年 9 月），这个问题的答案是：不能。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+想咨询下kubeadm适合生产环境安装集群么
+作者回复: 小规模可以。
+张老师，后面能讲讲怎么用二进制部署kubernetes吗？毕竟kubeadm不适用于生产环境，用二进制部署还是挺复杂的，恳请老师不吝讲解一下吧。
+ 作者回复: 我不建议直接使用二进制文件部署。而建议你花时间了解一下kubeadm的高可用部署，它现在已经初具雏形了。宝贵的时间应该用在刀刃上。
+https://time.geekbang.org/column/article/39712
+  kops
+ 如果你有部署规模化生产环境的需求，我推荐使用kops或者SaltStack 这样更复杂的部署工具。
+极客时间版权所有: https://time.geekbang.org/column/article/39712
+ ansible
+ https://github.com/easzlab/kubeasz
+ install on macos
+ 请问一下在MacBook上安装部署k8s要怎么做？
+ 作者回复: minikube
+https://time.geekbang.org/column/article/39712
+  operator 深入剖析Kubernetes
+ 技能图谱
+ https://static001.geekbang.org/resource/image/0d/cb/0da944e5bac4fe1d00d3f01a747e86cb.jpg
+best article 学习 Kubernetes 和容器技术体系的最佳方法
+Tips  （swarm）
+试用Rancher搭建过一个环境，感觉过程和kubeadm有些类似，主节点初始化生成token，其它节点通过token来进行join，而且是图形化。对于部署、运维能力都有限的中小企业来说，是否可以考虑这些非原生的部署方案？甚至是否可以考虑docker swarm呢？麻烦给个建议。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Zhixing DevOps Tips</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a><a href="https://github.com/nusr/reading-list/">
+        <li class="mobile-menu-item">阅读清单</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Zhixing DevOps Tips</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://github.com/nusr/reading-list/">阅读清单</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 00:00 </span>
+        
+          <span class="more-meta"> 约 65 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#kubernetes">Kubernetes</a></li>
+<li><a href="#安装">安装</a></li>
+<li><a href="#roadmap">roadmap</a>
+<ul>
+<li>
+<ul>
+<li><a href="#安装-1">安装</a></li>
+<li><a href="#operator">operator</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#best-article">best article</a>
+<ul>
+<li><a href="#tips">Tips</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="0001-01-01T00:00:00" title="January 1, 0001">January 1, 0001</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      
+
+<h1 id="kubernetes">Kubernetes</h1>
+
+<h1 id="安装">安装</h1>
+
+<p><strong>参考链接</strong></p>
+
+<p><a href="https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/README-cn.md">https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/README-cn.md</a></p>
+
+<blockquote>
+<p>Mac OS 测试可以安装，使用代理下载安装包快</p>
+</blockquote>
+
+<h1 id="roadmap">roadmap</h1>
+
+<p><strong>article</strong></p>
+
+<p><a href="https://time.geekbang.org/column/intro/116">https://time.geekbang.org/column/intro/116</a></p>
+
+<h3 id="安装-1">安装</h3>
+
+<p><strong>kubeadm</strong></p>
+
+<blockquote>
+<p>到目前为止（2018 年 9 月），这个问题的答案是：不能。</p>
+
+<p>极客时间版权所有: <a href="https://time.geekbang.org/column/article/39712">https://time.geekbang.org/column/article/39712</a></p>
+
+<p>想咨询下kubeadm适合生产环境安装集群么</p>
+
+<p>作者回复: 小规模可以。</p>
+
+<p><img src="/Users/zhouzhixing/Library/Application Support/typora-user-images/image-20190806231015895.png" alt="image-20190806231015895" /></p>
+
+<p>张老师，后面能讲讲怎么用二进制部署kubernetes吗？毕竟kubeadm不适用于生产环境，用二进制部署还是挺复杂的，恳请老师不吝讲解一下吧。</p>
+
+<blockquote>
+<p>作者回复: 我不建议直接使用二进制文件部署。而建议你花时间了解一下kubeadm的高可用部署，它现在已经初具雏形了。宝贵的时间应该用在刀刃上。</p>
+
+<p><a href="https://time.geekbang.org/column/article/39712">https://time.geekbang.org/column/article/39712</a></p>
+</blockquote>
+</blockquote>
+
+<p><strong>kops</strong></p>
+
+<blockquote>
+<p>如果你有部署规模化生产环境的需求，我推荐使用kops或者SaltStack 这样更复杂的部署工具。</p>
+
+<p>极客时间版权所有: <a href="https://time.geekbang.org/column/article/39712">https://time.geekbang.org/column/article/39712</a></p>
+</blockquote>
+
+<p><strong>ansible</strong></p>
+
+<blockquote>
+<p><a href="https://github.com/easzlab/kubeasz">https://github.com/easzlab/kubeasz</a></p>
+</blockquote>
+
+<p><strong>install on macos</strong></p>
+
+<blockquote>
+<p>请问一下在MacBook上安装部署k8s要怎么做？</p>
+
+<blockquote>
+<p>作者回复: minikube</p>
+
+<p><a href="https://time.geekbang.org/column/article/39712">https://time.geekbang.org/column/article/39712</a></p>
+</blockquote>
+</blockquote>
+
+<h3 id="operator">operator</h3>
+
+<p><a href="[https://book.zouhl.com/fs/%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes/27%20%20%E8%81%AA%E6%98%8E%E7%9A%84%E5%BE%AE%E5%88%9B%E6%96%B0%EF%BC%9AOperator%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E8%A7%A3%E8%AF%BB.pdf](https://book.zouhl.com/fs/深入剖析Kubernetes/27  聪明的微创新：Operator工作原理解读.pdf)">深入剖析Kubernetes</a></p>
+
+<hr />
+
+<blockquote>
+<p>技能图谱</p>
+</blockquote>
+
+<p><a href="https://static001.geekbang.org/resource/image/0d/cb/0da944e5bac4fe1d00d3f01a747e86cb.jpg">https://static001.geekbang.org/resource/image/0d/cb/0da944e5bac4fe1d00d3f01a747e86cb.jpg</a></p>
+
+<hr />
+
+<h1 id="best-article">best article</h1>
+
+<p><a href="https://www.infoq.cn/article/3yijOyajjpq-Fg809NIj">学习 Kubernetes 和容器技术体系的最佳方法</a></p>
+
+<hr />
+
+<h2 id="tips">Tips</h2>
+
+<blockquote>
+<p>（swarm）</p>
+
+<p>试用Rancher搭建过一个环境，感觉过程和kubeadm有些类似，主节点初始化生成token，其它节点通过token来进行join，而且是图形化。对于部署、运维能力都有限的中小企业来说，是否可以考虑这些非原生的部署方案？甚至是否可以考虑docker swarm呢？麻烦给个建议。</p>
+
+<blockquote>
+<p>作者回复: rancher现在就是kubernetes 啊，而docker swarm就不必尝试了，人家docker公司自己都放弃了</p>
+
+<p><a href="https://time.geekbang.org/column/article/39712">https://time.geekbang.org/column/article/39712</a></p>
+</blockquote>
+
+<p>楼主在这里有点鄙视swarm了，swarm在一定程度上可以解决很多问题。没有最好的，只有最合适的</p>
+
+<blockquote>
+<p>作者回复: Windows server简单易用，界面友好，一直都它的受众和细分市场，但你还是会毫不犹豫的选择Linux server。为什么呢？</p>
+
+<p>基础设施这件事情，一旦做出选择，整个公司就载进去了。</p>
+
+<p>这种场合下，为了政治正确强调“只有最合适的”，在我看来，是不负责任的。</p>
+
+<p><a href="https://time.geekbang.org/column/article/39712">https://time.geekbang.org/column/article/39712</a></p>
+</blockquote>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Zhixing Zhou</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        0001-01-01 00:00
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a target="_blank" rel="license noopener" href="https://github.com/nusr/blog/blob/master/LICENSE">MIT</a></span>
+  </p>
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wechat.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/alipay.jpg">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/Interesting/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/K8S/minikube/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/stevexu" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:zhixing0912@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/zhixingchou" class="iconfont icon-github" title="github"></a>
+      <a href="https://juejin.im/user/59aeb829f265da249960595a" class="iconfont icon-juejin" title="juejin"></a>
+      <a href="https://www.v2ex.com/member/stevexu" class="iconfont icon-v2ex" title="v2ex"></a>
+  <a href="https://zhixingchou.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Zhixing Zhou</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-CN".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

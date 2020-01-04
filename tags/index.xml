@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Zhixing DevOps Tips</title>
+    <link>https://zhixingchou.github.io/tags/</link>
+    <description>Recent content in Tags on Zhixing DevOps Tips</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 30 Sep 2019 01:37:56 +0800</lastBuildDate>
+    
+	<atom:link href="https://zhixingchou.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>docker</title>
+      <link>https://zhixingchou.github.io/tags/docker/</link>
+      <pubDate>Mon, 30 Sep 2019 01:37:56 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>preview</title>
+      <link>https://zhixingchou.github.io/tags/preview/</link>
+      <pubDate>Mon, 30 Sep 2019 01:37:56 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/preview/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tag-1</title>
+      <link>https://zhixingchou.github.io/tags/tag-1/</link>
+      <pubDate>Mon, 30 Sep 2019 01:37:56 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/tag-1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>中文</title>
+      <link>https://zhixingchou.github.io/tags/%E4%B8%AD%E6%96%87/</link>
+      <pubDate>Mon, 30 Sep 2019 01:37:56 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/%E4%B8%AD%E6%96%87/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>“code&#34;</title>
+      <link>https://zhixingchou.github.io/tags/code/</link>
+      <pubDate>Sun, 07 Jul 2019 22:28:34 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/code/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>template</title>
+      <link>https://zhixingchou.github.io/tags/template/</link>
+      <pubDate>Tue, 10 Jul 2018 00:00:00 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/template/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>shortcodes</title>
+      <link>https://zhixingchou.github.io/tags/shortcodes/</link>
+      <pubDate>Tue, 30 Aug 2016 16:01:23 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/shortcodes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Syntax Highlighting</title>
+      <link>https://zhixingchou.github.io/tags/Syntax-Highlighting/</link>
+      <pubDate>Tue, 30 Aug 2011 16:01:23 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/Syntax-Highlighting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tag-5</title>
+      <link>https://zhixingchou.github.io/tags/tag-5/</link>
+      <pubDate>Tue, 30 Aug 2011 16:01:23 +0800</pubDate>
+      
+      <guid>https://zhixingchou.github.io/tags/tag-5/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      labels.dedot: true
+      encoding: "utf-8"
+      templates:
+        - condition: 
+            or:
+               - contains.docker.container.image: 'portainer/portainer'
+               - contains.docker.container.image: 'portainer/agent'
+               - contains.docker.container.image: 'minio/minio'
+#          config:
+#            - type: log
+#              paths:
+#                - "/var/lib/docker/containers/${data.docker.container.id}/*.log"
+          config:
+            - type: docker
+              containers.ids:
+                - "${data.docker.container.id}"
+              exclude_lines: ["^\\s+[\\-`('.|_]"]  # drop asciiart lines
+output:
+  logstash:
+    hosts: ["192.168.31.155:5044"]
+#output.console:
+#  pretty: true
